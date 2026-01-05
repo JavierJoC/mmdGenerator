@@ -13,18 +13,24 @@ export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 ###     DETECCIÓN DE FALTA DE ARGUMENTOS    #####
 if [ $# -lt 1 ]; then
-  echo "Usage: mmd file.mmd [output.png|output.svg]"
+  echo "Usage: mmd file1.mmd [file2.mmd ...]"
+  #echo "Usage: mmd file.mmd [output.png|output.svg]"
   exit 1
 fi
 
 
-####    ASIGNACIÓN DE VARIABLES     ###########
-in="$1"
-out="${2:-${in%.mmd}.png}"
+### ITERAR SOBRE TODOS LOS ARGUMENTOS
+for in in "$@"; do
+  case "$in" in
+    *.mmd|*.md) ;;
+    *)
+      echo "Skipping '$in' (not a .mmd/.md file)"
+      continue
+      ;;
+  esac
 
+  out="${in%.*}.png"
 
-
-### EJECUCIÓN DEL SCRIPT
-#echo "$in --> $out"
-exec mmdc -i "$in" -o "$out" # Ejecuta el comando 
-#echo "-----------------"
+  echo "Rendering: $in → $out"
+  mmdc -i "$in" -o "$out"
+done
