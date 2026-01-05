@@ -5,11 +5,11 @@
 
 
 ###     CONFIGURACIONES INICIALES   ####
-set -eu #-e termina el scrip de inmediato si algo falla   -u trata las variables no definidas como error
+#set -eu #-e termina el scrip de inmediato si algo falla   -u trata las variables no definidas como error
 export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 SCRIPT_SELF="$0"  # $0 contiene el nombre/path del script
-
+CURRENT_DIRECTORY_WORK=$(pwd)"/"
 
 
 
@@ -31,8 +31,16 @@ out="${2:-${in%.mmd}.svg}"
 echo "$(date)"
 echo -n "verisión del scrip--> "
 ls -l $SCRIPT_SELF | awk '{print $6 " " $7  " " $8}'
-#exec mmdc --scale 2 --backgroundColor '#FFFFFF' -i "$in" -o "$out"
-exec mmdc  --backgroundColor '#FFFFFF' -i "$in" -o "$out"
 
+
+
+#exec mmdc --scale 2 --backgroundColor '#FFFFFF' -i "$in" -o "$out"
+echo "creando imágen svg $out"
+mmdc  -i "$in" -o "$out"
 #exec mmdc -i "$in" -o "$out" # Ejecuta el comando 
 #echo "-----------------"
+
+
+echo "abiendo imágen svg $CURRENT_DIRECTORY_WORK$out"
+firefox --new-window "$CURRENT_DIRECTORY_WORK$out"
+#firefox --new-window architecture.svg
