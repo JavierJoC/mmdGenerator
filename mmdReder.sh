@@ -8,6 +8,8 @@
 set -eu #-e termina el scrip de inmediato si algo falla   -u trata las variables no definidas como error
 export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
+SCRIPT_SELF="$0"  # $0 contiene el nombre/path del script
+
 
 
 
@@ -20,11 +22,17 @@ fi
 
 ####    ASIGNACIÓN DE VARIABLES     ###########
 in="$1"
-out="${2:-${in%.mmd}.png}"
+out="${2:-${in%.mmd}.svg}"
 
 
 
 ### EJECUCIÓN DEL SCRIPT
 #echo "$in --> $out"
-exec mmdc -i "$in" -o "$out" # Ejecuta el comando 
+echo "$(date)"
+echo -n "verisión del scrip--> "
+ls -l $SCRIPT_SELF | awk '{print $6 " " $7  " " $8}'
+#exec mmdc --scale 2 --backgroundColor '#FFFFFF' -i "$in" -o "$out"
+exec mmdc  --backgroundColor '#FFFFFF' -i "$in" -o "$out"
+
+#exec mmdc -i "$in" -o "$out" # Ejecuta el comando 
 #echo "-----------------"
