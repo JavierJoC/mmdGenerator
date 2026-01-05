@@ -19,7 +19,7 @@ if [ $# -lt 1 ]; then
 fi
 
 
-### ITERAR SOBRE TODOS LOS ARGUMENTOS
+### ITERAR SOBRE TODOS LOS ARCHIVOS DE ENTRADA
 for in in "$@"; do
   case "$in" in
     *.mmd|*.md) ;;
@@ -31,6 +31,14 @@ for in in "$@"; do
 
   out="${in%.*}.png"
 
-  echo "Rendering: $in → $out"
-  mmdc -i "$in" -o "$out"
+  ### VERIFICAR SI EL ARCHIVO YA EXISTE
+  if [ ! -f "$out" ]; then
+    echo "Rendering: $in → $out"
+    mmdc -i "$in" -o "$out"
+  else
+    echo "Already exists: $out (skipping render)"
+  fi
+
+  ### ABRIR EL ARCHIVO CON EL PROGRAMA POR DEFECTO
+  xdg-open "$out" >/dev/null 2>&1 &
 done
