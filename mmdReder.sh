@@ -42,12 +42,9 @@ for in in "$@"; do
     echo "Already exists → $out"
   else
     echo "Rendering → $in → $out"
-    mmdc \
-      --backgroundColor "$DEFAULT_BG" \
-      -i "$in" \
-      -o "$out"
+    mmdc  -i "$in" -o "$out"
   fi
 
-  xdg-open "$out" >/dev/null 2>&1 &
+   firefox --new-window "$out" 
 done
 
