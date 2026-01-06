@@ -5,15 +5,20 @@
 
 
 ###    IDENTIFICADOR DE LA RAMA ACTUAL  ###
-echo "$(git log --oneline -1)"
+echo "$(date)"
+echo "$(git branch --show-current)"
+echo "$(git log --oneline -1)" # Imprime el didentificador de la rama para saber desde dónde se está haciedo la prueba
+
 
 ###     CONFIGURACIONES INICIALES   ####
-#set -eu #-e termina el scrip de inmediato si algo falla   -u trata las variables no definidas como error
-export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+set -eu #-e termina el scrip de inmediato si algo falla   -u trata las variables no definidas como error
 
 SCRIPT_SELF="$0"  # $0 contiene el nombre/path del script
-CURRENT_DIRECTORY_WORK=$(pwd)"/"
+echo -n "versión del scrip--> "
+ls -l $SCRIPT_SELF | awk '{print $6 " " $7  " " $8}'
 
+export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+CURRENT_DIRECTORY_WORK=$(pwd)"/"
 
 
 ###     DETECCIÓN DE FALTA DE ARGUMENTOS    #####
@@ -22,17 +27,15 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
+
 ####    ASIGNACIÓN DE VARIABLES     ###########
 in="$1"
 out="${2:-${in%.mmd}.svg}"
+#echo "$in --> $out"
+archivo_creado="$CURRENT_DIRECTORY_WORK$out"
+
 
 ### EJECUCIÓN DEL SCRIPT
-#echo "$in --> $out"
-echo "$(date)"
-echo -n "verisión del scrip--> "
-ls -l $SCRIPT_SELF | awk '{print $6 " " $7  " " $8}'
-
-
 
 #exec mmdc --scale 2 --backgroundColor '#FFFFFF' -i "$in" -o "$out"
 echo "creando imágen svg $out"
@@ -41,6 +44,6 @@ mmdc  -i "$in" -o "$out"
 #echo "-----------------"
 
 
-echo "abiendo imágen svg $CURRENT_DIRECTORY_WORK$out"
-firefox --new-window "$CURRENT_DIRECTORY_WORK$out"
+echo "abiendo imágen svg $archivo_creado"
+firefox --new-window "$archivo_creado"
 #firefox --new-window architecture.svg
