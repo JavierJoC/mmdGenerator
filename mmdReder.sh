@@ -16,8 +16,8 @@ SCRIPT_SELF="$0"
 
 
 
-###     DETECCIÓN DE FALTA DE ARGUMENTOS    #####
-if [ $# -lt 1 ]; then
+### ───  FILTER LACK ARGUMENTS    #####
+if [ $# -lt 1 ]; then  #-lt-->les that
   echo "Usage: mmd file1.mmd [file2.mmd ...]"
   #echo "Usage: mmd file.mmd [output.png|output.svg]"
   exit 1
@@ -49,6 +49,7 @@ for in in "$@"; do
     mmdc  -i "$in" -o "$out"
   fi
 
+  #-----------abir el archivo creado-------------"
    firefox --new-window "$out" 
 done
 
