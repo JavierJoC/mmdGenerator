@@ -2,11 +2,16 @@
 # 
 #Autor: Francisco Javier José Angeles  bocho_zic@hotmail.com
 #Fecha de creación: dom 04 ene 2026 16:50:28 CST
+#!/bin/sh
 
+### ─── STRICT MODE ─────────────────────────────────────────────
+set -eu
 
-###     CONFIGURACIONES INICIALES   ####
-set -eu #-e termina el scrip de inmediato si algo falla   -u trata las variables no definidas como error
+### ─── CONFIGURATION ───────────────────────────────────────────
 export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+DEFAULT_BG="#FFFFFF"
+DEFAULT_FORMAT="svg"
+SCRIPT_SELF="$0"
 
 
 
@@ -18,27 +23,32 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
+### ─── METADATA ────────────────────────────────────────────────
+echo "Render started at: $(date)"
+echo -n "Script version: "
+ls -l "$SCRIPT_SELF" | awk '{print $6, $7, $8}'
+echo "----------------------------------------"
 
-### ITERAR SOBRE TODOS LOS ARCHIVOS DE ENTRADA
+### ─── MAIN LOOP ───────────────────────────────────────────────
 for in in "$@"; do
+
   case "$in" in
     *.mmd|*.md) ;;
     *)
-      echo "Skipping '$in' (not a .mmd/.md file)"
+      echo "Skipping '$in' (not a Mermaid file)"
       continue
       ;;
   esac
 
-  out="${in%.*}.png"
+  out="${in%.*}.${DEFAULT_FORMAT}"
 
-  ### VERIFICAR SI EL ARCHIVO YA EXISTE
-  if [ ! -f "$out" ]; then
-    echo "Rendering: $in → $out"
-    mmdc -i "$in" -o "$out"
+  if [ -f "$out" ]; then
+    echo "Already exists → $out"
   else
-    echo "Already exists: $out (skipping render)"
+    echo "Rendering → $in → $out"
+    mmdc  -i "$in" -o "$out"
   fi
 
-  ### ABRIR EL ARCHIVO CON EL PROGRAMA POR DEFECTO
-  xdg-open "$out" >/dev/null 2>&1 &
+   firefox --new-window "$out" 
 done
+
