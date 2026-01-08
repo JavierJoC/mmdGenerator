@@ -1,6 +1,8 @@
 #!/bin/bash
 # 
 #Autor: Francisco Javier José Angeles  bocho_zic@hotmail.com
+#El presente script sirve para crear diagramas mermaid localmente 
+#Uso de la dependencia mmdc que se tiene que instalar previmente
 #Fecha de creación: dom 04 ene 2026 16:50:28 CST
 #!/bin/sh
 
